@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SWP391.Infrastructure.Data;
+using SWP391.Infrastructure.Entities;
 using SWP391.Infrastructure.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SWP391.Infrastructure.Repositories
 {
@@ -24,6 +20,17 @@ namespace SWP391.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+        }
+
+        public async Task UpdateUserAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
         public Task DeleteUserAsync(int userId)
         {
             throw new NotImplementedException();
@@ -34,17 +41,7 @@ namespace SWP391.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<User?> GetUserByEmailAsync(string email)
-        {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
-        }
-
         public Task<User?> GetUserByIdAsync(int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateUserAsync(User user)
         {
             throw new NotImplementedException();
         }

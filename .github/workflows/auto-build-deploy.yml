@@ -3,10 +3,10 @@ name: CI/CD for .NET Solution (Local Docker)
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-deploy:
@@ -57,7 +57,7 @@ jobs:
       - name: Run Docker Container (Inject Connection string Config)
         run: |
           docker run -d --name $IMAGE_NAME \
-            -e ConnectionStrings__DefaultConnection="${{ secrets.CONNECTIONSTRING }}" 
+            -e ConnectionStrings__DefaultConnection="${{ secrets.CONNECTIONSTRING }}" \
             -p $DOCKER_PORT:$APP_PORT $IMAGE_NAME:v1
 
       - name: Clean build cache

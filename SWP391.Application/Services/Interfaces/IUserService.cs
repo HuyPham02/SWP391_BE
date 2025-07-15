@@ -1,9 +1,4 @@
 ﻿using SWP391.Application.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SWP391.Application.Services.Interfaces
 {
@@ -11,5 +6,8 @@ namespace SWP391.Application.Services.Interfaces
     {
         Task RegisterAsync(RegisterDto registerDto);
         Task<string> LoginAsync(LoginDto loginDto);
+        Task SendOTPEmailAsync(string email);
+        Task VerifyOTPAsync(VerifyOTPDto verifyOTPDto);
+        Task ResetPasswordAsync(ResetPasswordDto resetPasswordDto);
     }
 }

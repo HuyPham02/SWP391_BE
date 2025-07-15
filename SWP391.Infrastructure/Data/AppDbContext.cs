@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SWP391.Infrastructure.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace SWP391.Infrastructure.Data
         {
         }
         public DbSet<User> Users { get; set; } = null!;
+        public DbSet<OTP> OTPs { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
