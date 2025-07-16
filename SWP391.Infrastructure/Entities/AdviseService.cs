@@ -23,12 +23,12 @@ namespace SWP391.Infrastructure.Entities
         public decimal Price { get; set; }
         public ServiceStatus ServiceStatus { get; set; } = ServiceStatus.Pending;
 
-        public int AppointmentId { get; set; }
+        public int? AppointmentId { get; set; }
 
         [ForeignKey("AppointmentId")]
         public Appointment Appointment { get; set; } = null!;
 
-        public int AdviseNoteId { get; set; }
+        public int? AdviseNoteId { get; set; }
 
         [ForeignKey("AdviseNoteId")]
         public AdviseNote AdviseNote { get; set; } = null!;

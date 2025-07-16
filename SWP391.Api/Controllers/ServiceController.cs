@@ -24,14 +24,14 @@ namespace SWP391.Api.Controllers
         {
             try
             {
-                var staffIdClaim = User.FindFirst("sub")?.Value;
+                var staffIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(staffIdClaim) || !int.TryParse(staffIdClaim, out int staffId))
                 {
-                    return Unauthorized(ApiResponse<object>.Error(401, "Invalid staff authentication."));
+                    return Unauthorized(ApiResponse<object>.Error(401, "Xác thực nhân viên không hợp lệ."));
                 }
 
                 await _serviceService.AddTestServiceAsync(testServiceDto, staffId);
-                return Ok(ApiResponse<object>.Success(null, "Test service added successfully."));
+                return Ok(ApiResponse<object>.Success(null, "Dịch vụ kiểm tra được thêm thành công."));
             }
             catch (ArgumentException ex)
             {
@@ -39,7 +39,7 @@ namespace SWP391.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<object>.Error(500, $"An error occurred: {ex.Message}"));
+                return StatusCode(500, ApiResponse<object>.Error(500, $"Đã xảy ra lỗi: {ex.Message}"));
             }
         }
 
@@ -49,14 +49,14 @@ namespace SWP391.Api.Controllers
         {
             try
             {
-                var staffIdClaim = User.FindFirst("sub")?.Value;
+                var staffIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(staffIdClaim) || !int.TryParse(staffIdClaim, out int staffId))
                 {
-                    return Unauthorized(ApiResponse<object>.Error(401, "Invalid staff authentication."));
+                    return Unauthorized(ApiResponse<object>.Error(401, "Xác thực nhân viên không hợp lệ."));
                 }
 
                 await _serviceService.AddAdviseServiceAsync(adviseServiceDto, staffId);
-                return Ok(ApiResponse<object>.Success(null, "Advise service added successfully."));
+                return Ok(ApiResponse<object>.Success(null, "Dịch vụ tư vấn được thêm thành công."));
             }
             catch (ArgumentException ex)
             {
@@ -64,7 +64,7 @@ namespace SWP391.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<object>.Error(500, $"An error occurred: {ex.Message}"));
+                return StatusCode(500, ApiResponse<object>.Error(500, $"Đã xảy ra lỗi: {ex.Message}"));
             }
         }
     }
