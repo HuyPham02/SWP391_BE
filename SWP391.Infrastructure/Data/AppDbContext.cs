@@ -15,6 +15,13 @@ namespace SWP391.Infrastructure.Data
         }
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<OTP> OTPs { get; set; } = null!;
+        public DbSet<Blog> Blogs { get; set; } = null!;
+        public DbSet<Appointment> Appointments { get; set; } = null!;
+        public DbSet<AdviseService> AdviseServices { get; set; } = null!;
+        public DbSet<TestService> TestServices { get; set; } = null!;
+        public DbSet<AdviseNote> AdviseNotes { get; set; } = null!;
+        public DbSet<TestResult> TestResult { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

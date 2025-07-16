@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SWP391.Infrastructure.Entities
 {
     [Table("OTP")]
-    public class OTP
+    public partial class OTP
     {
         [Key]
         public int Id { get; set; }

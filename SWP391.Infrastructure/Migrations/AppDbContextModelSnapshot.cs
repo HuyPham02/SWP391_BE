@@ -22,6 +22,115 @@ namespace SWP391.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.AdviseNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Sugggestion")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AdviseNote");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.AdviseService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AdviseNoteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConsulationType")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("ContactType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdviseNoteId");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.ToTable("AdviseService");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.Appointment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AppointmentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("ValueDiscount")
+                        .HasColumnType("real");
+
+                    b.Property<string>("VoucherCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Appointment");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.Blog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Blog");
+                });
+
             modelBuilder.Entity("SWP391.Infrastructure.Entities.OTP", b =>
                 {
                     b.Property<int>("Id")
@@ -50,6 +159,58 @@ namespace SWP391.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OTP");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.TestResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Result")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Suggestion")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TestResult");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.TestService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TestName")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("TestResultId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("TestResultId");
+
+                    b.ToTable("TestService");
                 });
 
             modelBuilder.Entity("SWP391.Infrastructure.Entities.User", b =>
@@ -98,6 +259,90 @@ namespace SWP391.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.AdviseService", b =>
+                {
+                    b.HasOne("SWP391.Infrastructure.Entities.AdviseNote", "AdviseNote")
+                        .WithMany("AdviseServices")
+                        .HasForeignKey("AdviseNoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SWP391.Infrastructure.Entities.Appointment", "Appointment")
+                        .WithMany("AdviseServices")
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AdviseNote");
+
+                    b.Navigation("Appointment");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.Appointment", b =>
+                {
+                    b.HasOne("SWP391.Infrastructure.Entities.User", "User")
+                        .WithMany("Appointments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.Blog", b =>
+                {
+                    b.HasOne("SWP391.Infrastructure.Entities.User", "User")
+                        .WithMany("Blogs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.TestService", b =>
+                {
+                    b.HasOne("SWP391.Infrastructure.Entities.Appointment", "Appointment")
+                        .WithMany("TestServices")
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SWP391.Infrastructure.Entities.TestResult", "TestResult")
+                        .WithMany("TestServices")
+                        .HasForeignKey("TestResultId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("TestResult");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.AdviseNote", b =>
+                {
+                    b.Navigation("AdviseServices");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.Appointment", b =>
+                {
+                    b.Navigation("AdviseServices");
+
+                    b.Navigation("TestServices");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.TestResult", b =>
+                {
+                    b.Navigation("TestServices");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.User", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("Blogs");
                 });
 #pragma warning restore 612, 618
         }

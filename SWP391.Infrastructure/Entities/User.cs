@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using SWP391.Infrastructure.Enums;
+using System.Collections.Generic;
 
 namespace SWP391.Infrastructure.Entities
 {
@@ -31,6 +32,12 @@ namespace SWP391.Infrastructure.Entities
 
         public RoleEnum Role { get; set; }
 
-        public bool IsEmailVerified { get; set; } = false; // Thêm trường này
+        public bool IsEmailVerified { get; set; } = false;
+
+        // Navigation property cho Appointments
+        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+
+        // Navigation property cho Blogs
+        public ICollection<Blog> Blogs { get; set; } = new List<Blog>();
     }
 }
