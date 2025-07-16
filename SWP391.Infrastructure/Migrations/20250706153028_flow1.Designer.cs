@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWP391.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using SWP391.Infrastructure.Data;
 namespace SWP391.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250706153028_flow1")]
+    partial class flow1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,20 +33,15 @@ namespace SWP391.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ConsultantId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Note")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Suggestion")
+                    b.Property<string>("Sugggestion")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ConsultantId");
 
                     b.ToTable("AdviseNote");
                 });
@@ -62,26 +60,11 @@ namespace SWP391.Infrastructure.Migrations
                     b.Property<int>("AppointmentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ConsultationType")
-                        .IsRequired()
+                    b.Property<string>("ConsulationType")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("ContactType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("Duration")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ServiceStatus")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -217,25 +200,7 @@ namespace SWP391.Infrastructure.Migrations
                     b.Property<int>("AppointmentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("Duration")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("IsVisible")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ServiceStatus")
-                        .HasColumnType("int");
-
                     b.Property<string>("TestName")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -297,15 +262,6 @@ namespace SWP391.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
-                });
-
-            modelBuilder.Entity("SWP391.Infrastructure.Entities.AdviseNote", b =>
-                {
-                    b.HasOne("SWP391.Infrastructure.Entities.User", "Consultant")
-                        .WithMany()
-                        .HasForeignKey("ConsultantId");
-
-                    b.Navigation("Consultant");
                 });
 
             modelBuilder.Entity("SWP391.Infrastructure.Entities.AdviseService", b =>

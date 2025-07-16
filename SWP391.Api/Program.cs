@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using SWP391.Application.Services;
 using SWP391.Application.Services.Interfaces;
 using SWP391.Infrastructure;
@@ -15,7 +16,42 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "My API",
+        Version = "v1",
+        Description = "API for managing healthcare services."
+    });
+
+    // Add JWT Authentication
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Enter your JWT token (e.g., eyJ...). The 'Bearer ' prefix will be added automatically.",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http, // Chuẩn Bearer Authentication
+        Scheme = "bearer", // Lowercase, chuẩn HTTP Bearer
+        BearerFormat = "JWT" // Định dạng token là JWT
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 
 // Configure DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -59,9 +95,12 @@ builder.Services.AddCors(options =>
 
 // Register services
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IOTPRepository, OTPRepository>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
+builder.Services.AddScoped<IOTPRepository, OTPRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+
 builder.Services.AddScoped<AppDbContext>(); // Đảm bảo AppDbContext được đăng ký
 
 var app = builder.Build();

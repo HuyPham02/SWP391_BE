@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace SWP391.Infrastructure.Enums
 {
-    public enum RoleEnum
+    public enum ContactTypeEnum
     {
-        Customer = 1,
-        Consultant = 2,
-        Staff = 3,
-        Manager = 4,
-        Admin = 5,
+        Online = 1,
+        Offline = 2,
     }
 }

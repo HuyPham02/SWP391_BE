@@ -20,7 +20,7 @@ namespace SWP391.Infrastructure.Data
         public DbSet<AdviseService> AdviseServices { get; set; } = null!;
         public DbSet<TestService> TestServices { get; set; } = null!;
         public DbSet<AdviseNote> AdviseNotes { get; set; } = null!;
-        public DbSet<TestResult> TestResult { get; set; } = null!;
+        public DbSet<TestResult> TestResults { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
