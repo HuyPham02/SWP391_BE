@@ -10,21 +10,23 @@ namespace SWP391.Infrastructure.Entities
     {
         [Key]
         public int Id { get; set; }
+
         public DateTime AppointmentDate { get; set; }
+
         public string VoucherCode { get; set; } = string.Empty;
+
         public float ValueDiscount { get; set; }
 
         // Foreign key to User
         public int UserId { get; set; }
 
-        // Navigation property to User
         [ForeignKey("UserId")]
         public User User { get; set; } = null!;
 
-        // Navigation property cho AdviseServices
-        public ICollection<AdviseService> AdviseServices { get; set; } = new List<AdviseService>();
+        // Navigation property cho AdviseNotes (mới)
+        public ICollection<AdviseNote> AdviseNotes { get; set; } = new List<AdviseNote>();
 
-        // Navigation property cho TestServices
-        public ICollection<TestService> TestServices { get; set; } = new List<TestService>();
+        // Navigation property cho TestResults (mới)
+        public ICollection<TestResult> TestResults { get; set; } = new List<TestResult>();
     }
 }

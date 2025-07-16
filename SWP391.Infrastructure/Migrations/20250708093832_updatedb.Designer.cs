@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWP391.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using SWP391.Infrastructure.Data;
 namespace SWP391.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250708093832_updatedb")]
+    partial class updatedb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,9 +33,6 @@ namespace SWP391.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AdviseServiceId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("AppointmentId")
                         .HasColumnType("int");
 
@@ -46,16 +46,11 @@ namespace SWP391.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("ServiceStatus")
-                        .HasColumnType("int");
-
                     b.Property<string>("Suggestion")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AdviseServiceId");
 
                     b.HasIndex("AppointmentId");
 
@@ -71,6 +66,9 @@ namespace SWP391.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AdviseNoteId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ConsultationType")
                         .IsRequired()
@@ -88,7 +86,12 @@ namespace SWP391.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("ServiceStatus")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AdviseNoteId");
 
                     b.ToTable("AdviseService");
                 });
@@ -200,21 +203,13 @@ namespace SWP391.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("ServiceStatus")
-                        .HasColumnType("int");
-
                     b.Property<string>("Suggestion")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("TestServiceId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AppointmentId");
-
-                    b.HasIndex("TestServiceId");
 
                     b.ToTable("TestResult");
                 });
@@ -227,6 +222,9 @@ namespace SWP391.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AppointmentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -235,15 +233,28 @@ namespace SWP391.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("IsVisible")
+                        .HasColumnType("bit");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ServiceStatus")
+                        .HasColumnType("int");
 
                     b.Property<string>("TestName")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<int>("TestResultId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("TestResultId");
 
                     b.ToTable("TestService");
                 });
@@ -298,12 +309,6 @@ namespace SWP391.Infrastructure.Migrations
 
             modelBuilder.Entity("SWP391.Infrastructure.Entities.AdviseNote", b =>
                 {
-                    b.HasOne("SWP391.Infrastructure.Entities.AdviseService", "AdviseService")
-                        .WithMany("AdviseNotes")
-                        .HasForeignKey("AdviseServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SWP391.Infrastructure.Entities.Appointment", "Appointment")
                         .WithMany("AdviseNotes")
                         .HasForeignKey("AppointmentId");
@@ -312,11 +317,20 @@ namespace SWP391.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("ConsultantId");
 
-                    b.Navigation("AdviseService");
-
                     b.Navigation("Appointment");
 
                     b.Navigation("Consultant");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.AdviseService", b =>
+                {
+                    b.HasOne("SWP391.Infrastructure.Entities.AdviseNote", "AdviseNote")
+                        .WithMany("AdviseServices")
+                        .HasForeignKey("AdviseNoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AdviseNote");
                 });
 
             modelBuilder.Entity("SWP391.Infrastructure.Entities.Appointment", b =>
@@ -344,35 +358,42 @@ namespace SWP391.Infrastructure.Migrations
             modelBuilder.Entity("SWP391.Infrastructure.Entities.TestResult", b =>
                 {
                     b.HasOne("SWP391.Infrastructure.Entities.Appointment", "Appointment")
-                        .WithMany("TestResults")
+                        .WithMany()
                         .HasForeignKey("AppointmentId");
 
-                    b.HasOne("SWP391.Infrastructure.Entities.TestService", "TestService")
-                        .WithMany("TestResults")
-                        .HasForeignKey("TestServiceId")
+                    b.Navigation("Appointment");
+                });
+
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.TestService", b =>
+                {
+                    b.HasOne("SWP391.Infrastructure.Entities.Appointment", null)
+                        .WithMany("TestServices")
+                        .HasForeignKey("AppointmentId");
+
+                    b.HasOne("SWP391.Infrastructure.Entities.TestResult", "TestResult")
+                        .WithMany("TestServices")
+                        .HasForeignKey("TestResultId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Appointment");
-
-                    b.Navigation("TestService");
+                    b.Navigation("TestResult");
                 });
 
-            modelBuilder.Entity("SWP391.Infrastructure.Entities.AdviseService", b =>
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.AdviseNote", b =>
                 {
-                    b.Navigation("AdviseNotes");
+                    b.Navigation("AdviseServices");
                 });
 
             modelBuilder.Entity("SWP391.Infrastructure.Entities.Appointment", b =>
                 {
                     b.Navigation("AdviseNotes");
 
-                    b.Navigation("TestResults");
+                    b.Navigation("TestServices");
                 });
 
-            modelBuilder.Entity("SWP391.Infrastructure.Entities.TestService", b =>
+            modelBuilder.Entity("SWP391.Infrastructure.Entities.TestResult", b =>
                 {
-                    b.Navigation("TestResults");
+                    b.Navigation("TestServices");
                 });
 
             modelBuilder.Entity("SWP391.Infrastructure.Entities.User", b =>

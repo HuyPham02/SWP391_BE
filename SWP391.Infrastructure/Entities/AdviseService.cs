@@ -9,28 +9,21 @@ namespace SWP391.Infrastructure.Entities
     {
         [Key]
         public int Id { get; set; }
-        [Required]
-        public ContactTypeEnum ContactType { get; set; }
+
         [Required]
         [StringLength(255)]
-        public string? ConsultationType { get; set; }
+        public string ConsultationType { get; set; } = null!;
+
         [StringLength(1000)]
         public string? Description { get; set; }
 
         [StringLength(50)]
-        public string? Duration { get; set; } // Ví dụ: "30 minutes", "1 hour"
+        public string? Duration { get; set; }
 
         public decimal Price { get; set; }
-        public ServiceStatus ServiceStatus { get; set; } = ServiceStatus.Pending;
 
-        public int? AppointmentId { get; set; }
 
-        [ForeignKey("AppointmentId")]
-        public Appointment Appointment { get; set; } = null!;
+        public ICollection<AdviseNote> AdviseNotes { get; set; } = new List<AdviseNote>();
 
-        public int? AdviseNoteId { get; set; }
-
-        [ForeignKey("AdviseNoteId")]
-        public AdviseNote AdviseNote { get; set; } = null!;
     }
 }
